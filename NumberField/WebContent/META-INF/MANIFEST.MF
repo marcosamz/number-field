@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Vaadin-License-Title: Apache License 2.0
+Implementation-Title: Number Field
+Implementation-Version: 1.0.0
+Vaadin-Package-Version: 1
+Vaadin-Widgetsets: it.portus.addon.numberfield.widgetset.NumberfieldWi
+ dgetset
+Class-Path: 
+

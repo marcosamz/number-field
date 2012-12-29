@@ -44,7 +44,7 @@ import com.vaadin.terminal.gwt.client.ui.VTextField;
  * @since 20/nov/2012
  */
 public class VTextualNumber extends VNumberField implements Paintable, Field, KeyDownHandler, KeyUpHandler, ChangeHandler, ContainerResizedListener,
-Focusable, SubPartAware {
+		Focusable, SubPartAware {
 
 	// private static final String PARSE_ERROR_CLASSNAME = CLASSNAME +
 	// "-parseerror";
@@ -283,7 +283,7 @@ Focusable, SubPartAware {
 	public void onKeyUp(KeyUpEvent event) {
 		if (!event.isAnyModifierKeyDown()) {
 			int cursorPos = text.getCursorPos();
-			//updateContent();
+			// updateContent();
 			text.setCursorPos(cursorPos);
 		}
 	}
@@ -326,7 +326,9 @@ Focusable, SubPartAware {
 			setValue(value);
 			value = getValue();
 
-			this.text.setText(numberFormatter.format(value));
+			text = numberFormatter.format(value);
+			this.text.setText(text);
+
 			ValueChangeEvent.fire(this, value);
 		}
 	}
@@ -364,7 +366,7 @@ Focusable, SubPartAware {
 	}
 
 	private void updateContent(final String inputText) {
-		setPrompting(inputPrompt != null && (inputText.equals("")));
+		setPrompting(inputPrompt != null && (inputText != null && inputText.equals("")));
 
 		if (BrowserInfo.get().isFF3()) {
 			/*

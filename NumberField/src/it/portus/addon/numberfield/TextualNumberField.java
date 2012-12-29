@@ -172,7 +172,7 @@ public class TextualNumberField<T extends Number> extends AbstractTextField {
 
 		if (!isReadOnly() && (variables.containsKey("value"))) {
 			Object value = variables.get("value");
-			if (value == null || "".equals(value)) {
+			if (value == null || "".equals(value.toString().trim())) {
 				setValue(null, true); // Don't require a repaint, client
 			} else {
 				BigDecimal bigDecimal = new BigDecimal(value.toString());
@@ -270,6 +270,19 @@ public class TextualNumberField<T extends Number> extends AbstractTextField {
 		return clsType;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public Number getValue() {
+		Object v = super.getValue();
+		if (v != null) {
+			return (T) v;
+		} else if (v == null && !isAllowNull()) {
+			return new Double(0);
+		} else {
+			return null;
+		}
+	}
+
 	public boolean isAllowNegative() {
 		return allowNegative;
 	}
@@ -320,8 +333,6 @@ public class TextualNumberField<T extends Number> extends AbstractTextField {
 
 		if (numberFormat != null) {
 			target.addAttribute("numberFormat", numberFormat.name());
-		} else {
-			System.out.println();
 		}
 
 		if (maxVal != null) {
@@ -477,52 +488,7 @@ public class TextualNumberField<T extends Number> extends AbstractTextField {
 
 	@Override
 	protected void setValue(Object newValue, boolean repaintIsNotNeeded) throws Property.ReadOnlyException, Property.ConversionException {
-
-		/*
-		 * First handle special case when the client side component have a
-		 * number string but value is null (e.g. unparsable number string typed
-		 * in by the user). No value changes should happen, but we need to do
-		 * some internal housekeeping.
-		 */
-		if (newValue == null) {
-			/*
-			 * Side-effects of setInternalValue clears possible previous strings
-			 * and flags about invalid input.
-			 */
-			setInternalValue(null);
-
-			/*
-			 * Due to SpinnerTextField's special implementation of isValid(),
-			 * SpinnerTextFields validity may change although the logical value
-			 * does not change. This is an issue for Form which expects that
-			 * validity of Fields cannot change unless actual value changes.
-			 * 
-			 * So we check if this field is inside a form and the form has
-			 * registered this as a field. In this case we repaint the form.
-			 * Without this hacky solution the form might not be able to clean
-			 * validation errors etc. We could avoid this by firing an extra
-			 * value change event, but feels like at least as bad solution as
-			 * this.
-			 */
-			notifyFormOfValidityChange();
-			requestRepaint();
-			return;
-		} else {
-			super.setValue(newValue, repaintIsNotNeeded);
-		}
-	}
-
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public Number getValue() {
-		Object v = super.getValue();
-		if (v != null) {
-			return (T) v;
-		} else if (v == null && !isAllowNull()) {
-			return (T) new Double(0);
-		} else {
-			return null;
-		}
+		super.setValue(newValue, repaintIsNotNeeded);
+		notifyFormOfValidityChange();
 	}
 }

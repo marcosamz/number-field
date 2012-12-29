@@ -93,10 +93,14 @@ public class NumberFormatter {
 	}
 
 	public String format(Number value, int scale) {
-		BigDecimal bigDecimal = new BigDecimal(value.toString());
-		bigDecimal = bigDecimal.setScale(scale, DEFAULT_ROUNDING_MODE);
+		String str = null;
+		if (value != null) {
+			BigDecimal bigDecimal = new BigDecimal(value.toString());
+			bigDecimal = bigDecimal.setScale(scale, DEFAULT_ROUNDING_MODE);
 
-		return format(bigDecimal.toString(), scale);
+			str = bigDecimal.toString();
+		}
+		return format(str, scale);
 	}
 
 	public String format(Number value, NumberFormat numberFormat) {

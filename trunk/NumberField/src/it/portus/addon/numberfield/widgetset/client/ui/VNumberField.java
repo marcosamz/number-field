@@ -191,8 +191,12 @@ public class VNumberField extends FlowPanel implements Paintable, Field, HasValu
 
 		this.value = value;
 
-		// always send the value string
-		getClient().updateVariable(getId(), "value", (this.value != null ? getStringValue() : ""), immediate);
+		// Send the value string
+		getClient().updateVariable(getId(), "value", (this.value != null ? getStringValue() : ""), false);
+
+		if (immediate) {
+			client.sendPendingVariableChanges();
+		}
 	}
 
 	@Override

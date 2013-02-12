@@ -76,6 +76,8 @@ public class VTextualNumber extends VNumberField implements Paintable, Field, Ke
 
 	private NumberFormatter numberFormatter = new NumberFormatter();
 
+	private boolean hasFocus = false;
+
 	public VTextualNumber() {
 		super();
 		text = new TextBox();
@@ -87,9 +89,12 @@ public class VTextualNumber extends VNumberField implements Paintable, Field, Ke
 		text.addKeyDownHandler(this);
 		text.addKeyUpHandler(this);
 		text.addChangeHandler(this);
+
 		text.addFocusHandler(new FocusHandler() {
 			@Override
 			public void onFocus(FocusEvent event) {
+				hasFocus = true;
+
 				text.addStyleName(VTextField.CLASSNAME + "-" + VTextField.CLASSNAME_FOCUS);
 				leftSymbol.addStyleName(VTextField.CLASSNAME + "-" + VTextField.CLASSNAME_FOCUS);
 				rightSymbol.addStyleName(VTextField.CLASSNAME + "-" + VTextField.CLASSNAME_FOCUS);
@@ -105,6 +110,8 @@ public class VTextualNumber extends VNumberField implements Paintable, Field, Ke
 		text.addBlurHandler(new BlurHandler() {
 			@Override
 			public void onBlur(BlurEvent event) {
+				hasFocus = false;
+
 				text.removeStyleName(VTextField.CLASSNAME + "-" + VTextField.CLASSNAME_FOCUS);
 				leftSymbol.removeStyleName(VTextField.CLASSNAME + "-" + VTextField.CLASSNAME_FOCUS);
 				rightSymbol.removeStyleName(VTextField.CLASSNAME + "-" + VTextField.CLASSNAME_FOCUS);
@@ -118,15 +125,18 @@ public class VTextualNumber extends VNumberField implements Paintable, Field, Ke
 				}
 			}
 		});
+
 		text.addMouseWheelHandler(new MouseWheelHandler() {
 
 			@Override
 			public void onMouseWheel(MouseWheelEvent event) {
-				if (event.isNorth()) {
-					increaseValue();
-				}
-				if (event.isSouth()) {
-					decreaseValue();
+				if (hasFocus) {
+					if (event.isNorth()) {
+						increaseValue();
+					}
+					if (event.isSouth()) {
+						decreaseValue();
+					}
 				}
 			}
 		});
@@ -525,11 +535,6 @@ public class VTextualNumber extends VNumberField implements Paintable, Field, Ke
 			}
 		}
 
-		leftSymbol.removeStyleDependentName(CLASS_NAME_SYMBOL_LEFT);
-		leftSymbol.removeStyleDependentName(CLASS_NAME_SYMBOL_RIGHT);
-		rightSymbol.removeStyleDependentName(CLASS_NAME_SYMBOL_LEFT);
-		rightSymbol.removeStyleDependentName(CLASS_NAME_SYMBOL_RIGHT);
-
 		if (uidl.hasAttribute("textAlignment")) {
 			text.setAlignment(TextAlignment.valueOf(uidl.getStringAttribute("textAlignment").toUpperCase()));
 		}
@@ -542,6 +547,17 @@ public class VTextualNumber extends VNumberField implements Paintable, Field, Ke
 			rightSymbol.getElement().setInnerText(uidl.getStringAttribute("suffix"));
 			hasSuffix = true;
 		}
+
+		leftSymbol.removeStyleDependentName(CLASS_NAME_SYMBOL_LEFT);
+		leftSymbol.removeStyleDependentName(CLASS_NAME_SYMBOL_RIGHT);
+		leftSymbol.removeStyleDependentName(VTextField.CLASSNAME);
+
+		rightSymbol.removeStyleDependentName(CLASS_NAME_SYMBOL_LEFT);
+		rightSymbol.removeStyleDependentName(CLASS_NAME_SYMBOL_RIGHT);
+		rightSymbol.removeStyleDependentName(VTextField.CLASSNAME);
+
+		text.removeStyleName(TEXT_CLASS_PREFIX);
+		text.removeStyleName(TEXT_CLASS_SUFFIX);
 
 		if (hasPrefix) {
 			text.addStyleName(TEXT_CLASS_PREFIX);

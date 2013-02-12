@@ -29,7 +29,7 @@ public class NumberFormatter {
 		numberFormatter.setGroupingSeparator('.');
 		numberFormatter.setScale(0);
 
-		String value = "10.000";
+		String value = "104,99000000000001";
 		Number val = numberFormatter.unformat(value);
 		System.out.println("unformat: " + val);
 
@@ -223,9 +223,11 @@ public class NumberFormatter {
 		Number result = null;
 		if (text != null && !"".equals(text.trim())) {
 			try {
+
+				// FIXME CONTROLLARE!!
 				if (groupingSeparator == '.') {
 					String[] temp = text.split("\\.");
-					if (/* NOT */!(temp.length == 2 && (temp[1].length() == 1 || temp[1].length() == 2))) {
+					if (/* NOT */!(temp.length == 2 && (temp[1].length() != 3))) {
 						text = removeChar(text, groupingSeparator);
 					}
 				}

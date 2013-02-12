@@ -5,6 +5,7 @@ import it.portus.addon.numberfield.widgetset.shared.TextAlignment;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import com.vaadin.Application;
 import com.vaadin.ui.AbstractComponent;
@@ -28,6 +29,32 @@ import com.vaadin.ui.Window;
 @SuppressWarnings("serial")
 public class NumberFieldApplication extends Application {
 
+	private <N extends TextualNumberField<? extends Number>> AbstractComponent getComponent(final List<N> fields) {
+		VerticalLayout verticalLayout = new VerticalLayout();
+		verticalLayout.setSpacing(true);
+		verticalLayout.setSizeFull();
+
+		{
+			for (AbstractField f : fields) {
+				VerticalLayout vLayout = new VerticalLayout();
+				vLayout.setSizeFull();
+				vLayout.setSpacing(true);
+
+				HorizontalLayout valueLayout = new HorizontalLayout();
+				valueLayout.setSizeFull();
+
+				f.setSizeFull();
+				vLayout.addComponent(f);
+				vLayout.addComponent(valueLayout);
+				vLayout.setComponentAlignment(valueLayout, Alignment.BOTTOM_LEFT);
+
+				verticalLayout.addComponent(vLayout);
+			}
+		}
+
+		return verticalLayout;
+	}
+
 	@Override
 	public void init() {
 		Window mainWindow = new Window("NumberField Application");
@@ -43,6 +70,9 @@ public class NumberFieldApplication extends Application {
 		spinnerTest.setMaxVal(5000);
 		spinnerTest.setMinVal(0);
 		spinnerTest.setTextAlignment(TextAlignment.RIGHT);
+
+		Locale brasilLocale = new Locale("pt", "BR");
+		spinnerTest.setLocale(brasilLocale);
 
 		spinnerTest.setInputPrompt("Inserire un Valore");
 
@@ -216,31 +246,5 @@ public class NumberFieldApplication extends Application {
 
 		mainWindow.addComponent(verticalLayout);
 		setMainWindow(mainWindow);
-	}
-
-	private <N extends TextualNumberField<? extends Number>> AbstractComponent getComponent(final List<N> fields) {
-		VerticalLayout verticalLayout = new VerticalLayout();
-		verticalLayout.setSpacing(true);
-		verticalLayout.setSizeFull();
-
-		{
-			for (AbstractField f : fields) {
-				VerticalLayout vLayout = new VerticalLayout();
-				vLayout.setSizeFull();
-				vLayout.setSpacing(true);
-
-				HorizontalLayout valueLayout = new HorizontalLayout();
-				valueLayout.setSizeFull();
-
-				f.setSizeFull();
-				vLayout.addComponent(f);
-				vLayout.addComponent(valueLayout);
-				vLayout.setComponentAlignment(valueLayout, Alignment.BOTTOM_LEFT);
-
-				verticalLayout.addComponent(vLayout);
-			}
-		}
-
-		return verticalLayout;
 	}
 }

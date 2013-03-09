@@ -11,8 +11,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.vaadin.data.Property;
-import com.vaadin.event.FieldEvents.BlurEvent;
-import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.terminal.PaintException;
 import com.vaadin.terminal.PaintTarget;
 import com.vaadin.ui.AbstractTextField;
@@ -193,14 +191,6 @@ public class TextualNumberField<T extends Number> extends AbstractTextField {
 				}
 				setValue(value, true); // Don't require a repaint, client
 			}
-		}
-
-		if (variables.containsKey(FocusEvent.EVENT_ID)) {
-			fireEvent(new FocusEvent(this));
-		}
-
-		if (variables.containsKey(BlurEvent.EVENT_ID)) {
-			fireEvent(new BlurEvent(this));
 		}
 	}
 

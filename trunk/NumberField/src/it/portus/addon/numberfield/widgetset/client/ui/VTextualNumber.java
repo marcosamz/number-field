@@ -31,10 +31,8 @@ import com.vaadin.terminal.gwt.client.BrowserInfo;
 import com.vaadin.terminal.gwt.client.ContainerResizedListener;
 import com.vaadin.terminal.gwt.client.EventId;
 import com.vaadin.terminal.gwt.client.Focusable;
-import com.vaadin.terminal.gwt.client.Paintable;
 import com.vaadin.terminal.gwt.client.UIDL;
 import com.vaadin.terminal.gwt.client.VConsole;
-import com.vaadin.terminal.gwt.client.ui.Field;
 import com.vaadin.terminal.gwt.client.ui.SubPartAware;
 import com.vaadin.terminal.gwt.client.ui.VTextField;
 
@@ -43,8 +41,8 @@ import com.vaadin.terminal.gwt.client.ui.VTextField;
  * 
  * @since 20/nov/2012
  */
-public class VTextualNumber extends VNumberField implements Paintable, Field, KeyDownHandler, KeyUpHandler, ChangeHandler, ContainerResizedListener,
-		Focusable, SubPartAware {
+public class VTextualNumber extends VNumberField implements KeyDownHandler, KeyUpHandler, ChangeHandler, ContainerResizedListener, Focusable,
+		SubPartAware {
 
 	// private static final String PARSE_ERROR_CLASSNAME = CLASSNAME +
 	// "-parseerror";
@@ -575,8 +573,16 @@ public class VTextualNumber extends VNumberField implements Paintable, Field, Ke
 			add(rightSymbol);
 		}
 
-		final String text = uidl.getStringVariable("text");
-		updateContent(text);
+		String text = null;
+		if (uidl.hasAttribute("text")) {
+			text = uidl.getStringAttribute("text");
+		} else if (uidl.hasVariable("text")) {
+			text = uidl.getStringVariable("text");
+		}
+
+		if (text != null) {
+			updateContent(text);
+		}
 
 		updateWidth();
 	}

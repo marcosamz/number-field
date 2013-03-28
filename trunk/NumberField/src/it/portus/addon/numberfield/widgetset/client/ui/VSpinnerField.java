@@ -4,16 +4,14 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Element;
 import com.vaadin.terminal.gwt.client.ApplicationConnection;
-import com.vaadin.terminal.gwt.client.Paintable;
 import com.vaadin.terminal.gwt.client.UIDL;
-import com.vaadin.terminal.gwt.client.ui.Field;
 
 /**
  * @author Francesco Portus (portusgraphics@gmail.com)
  * 
  * @since 20/nov/2012
  */
-public class VSpinnerField extends VTextualNumber implements Paintable, Field {
+public class VSpinnerField extends VTextualNumber {
 
 	private final SpinnerPanel spinner;
 

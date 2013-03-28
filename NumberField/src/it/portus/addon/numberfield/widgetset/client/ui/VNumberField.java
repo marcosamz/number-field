@@ -201,6 +201,10 @@ public class VNumberField extends FlowPanel implements Paintable, Field, HasValu
 
 	@Override
 	public void updateFromUIDL(UIDL uidl, ApplicationConnection client) {
+		// Save details
+		this.client = client;
+		id = uidl.getId();
+
 		// Ensure correct implementation and let layout manage caption
 		if (client.updateComponent(this, uidl, true)) {
 			return;
@@ -226,9 +230,6 @@ public class VNumberField extends FlowPanel implements Paintable, Field, HasValu
 			scale = uidl.getIntAttribute("scale");
 		}
 
-		// Save details
-		this.client = client;
-		id = uidl.getId();
 		immediate = uidl.getBooleanAttribute("immediate");
 
 		readOnly = uidl.getBooleanAttribute("readonly");
